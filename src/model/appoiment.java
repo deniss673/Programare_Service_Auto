@@ -1,18 +1,21 @@
 package model;
 
+import dao.AppoimentDao;
+
 import java.util.Date;
 import java.util.Scanner;
 
 public class appoiment {
     private Date date;
-    private car car_toRepair;
+    private car carToRepair;
     private int expected_days;
     private String problems;
 
 
+
     public appoiment(Date date, car car_toRepair, String problems) {
         this.date = date;
-        this.car_toRepair = car_toRepair;
+        this.carToRepair = car_toRepair;
         this.problems = problems;
     }
     public Date getDate() {
@@ -22,10 +25,10 @@ public class appoiment {
         this.date = date;
     }
     public car getCar() {
-        return car_toRepair;
+        return carToRepair;
     }
     public void setCar(car car) {
-        this.car_toRepair = car;
+        this.carToRepair = car;
     }
     public int getExpected_days() {
         return expected_days;
@@ -42,31 +45,7 @@ public class appoiment {
         this.problems = problems;
     }
 
-    public static appoiment create_appoiment(client client_){
-        if (client_.getClient_cars().size()==0){
-            System.out.println("No cars found");
-            return null;
-        }
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Select your car:");
-        client_.show_cars();
-        int choice= sc.nextInt();
 
-        car car_;
-
-        while(choice >client_.getClient_cars().size() || choice <1){
-            System.out.println("Select a valid car!");
-            choice= sc.nextInt();
-        }
-
-        car_=client_.getClient_cars().get(choice-1);
-        Date date=new Date();
-        System.out.println("Sumbit the car problems: ");
-        String problems=sc.nextLine();
-
-        return new appoiment(date,car_,problems);
-
-    }
 
     public void modify(client client_){
         System.out.println("1.Select another car");
@@ -85,7 +64,7 @@ public class appoiment {
                     car_choice= sc.nextInt();
                 }
 
-                this.car_toRepair=client_.getClient_cars().get(car_choice-1);
+                this.carToRepair=client_.getClient_cars().get(car_choice-1);
                 break;
             case 2:
                 System.out.println("Sumbit the car problems: ");

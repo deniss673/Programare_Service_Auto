@@ -1,20 +1,21 @@
+import java.sql.SQLException;
 import java.util.*;
 
+import dao.AppoimentDao;
+import dao.ClientDao;
+import dao.UserDao;
+import daoServices.AppoimentServiceDao;
+import daoServices.CarServiceDao;
+import daoServices.ClientServiceDao;
+import daoServices.UserServiceDao;
 import model.*;
 
 public class Serivce {
 
-    List<persoana> users = new ArrayList<persoana>();
-    Map<client,appoiment> hasmap = new HashMap<client,appoiment>();
-    persoana current_user = null;
+    user current_user = null;
     Map<client,List<invoice>> clientinvoiceMap= new HashMap<client,List<invoice>>();
 
-    public void set_user(String username, String password) {
-        for(persoana usr : users) {
-            if(Objects.equals(username,usr.getUser_name()) && Objects.equals(password,usr.getPassword()))
-                current_user=usr;
-        }
-    }
+
 
 
     public int service_options(int role)
@@ -30,7 +31,7 @@ public class Serivce {
         else if (role==2){
             System.out.println("Enter service number");
             System.out.println("1. Create an appoiment");
-            System.out.println("2. Modify an appoiment");
+            System.out.println("2. Show all appoiments");
             System.out.println("3. Delete an appoiment");
             System.out.println("4. Latest payments");
             System.out.println("5. Purchase membership");
@@ -48,29 +49,59 @@ public class Serivce {
         if (role==0){
             switch (command){
                 case 1:
-                    role=persoana.log_in(users,current_user);
+                    try{
+                        UserServiceDao userDao = new UserServiceDao();
+                        current_user= userDao.login();
+                        role=userDao.getRole(current_user.getUser_name());
+
+                    }
+                    catch(SQLException e){
+                        System.out.println(e);
+                    }
                     break;
                 case 2:
                     role=2;
-                    current_user=persoana.create_account();
-                    users.add(current_user);
+                    try{
+                        UserServiceDao userDao = new UserServiceDao();
+                        current_user= userDao.register();
+                    }
+                    catch(SQLException e){
+                        System.out.println(e);
+                    }
                     break;
             }
         }
         else if (role==2){
             switch (command){
                 case 1:
-                    client client_= (client) current_user;
-                    appoiment app=appoiment.create_appoiment(client_);
-                    if(app!=null)
-                        hasmap.put(client_,app);
+                    try{
+                        AppoimentServiceDao app= new AppoimentServiceDao();
+
+                        app.createAppoiment(current_user.getUser_name());
+
+                    }
+                    catch (SQLException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 2:
-                    appoiment app_=hasmap.get(current_user);
-                    app_.modify((client) current_user);
+                    try{
+                        AppoimentServiceDao app= new AppoimentServiceDao();
+                        app.showAppoiment(current_user.getUser_name());
+                    }
+                    catch (SQLException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 3:
-                    hasmap.remove(current_user);
+
+                    try{
+                        AppoimentServiceDao app= new AppoimentServiceDao();
+                        app.deleteAppoiment(current_user.getUser_name());
+                    }
+                    catch (SQLException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
 
                 case 4:
@@ -88,18 +119,40 @@ public class Serivce {
                     Scanner scanner=new Scanner(System.in);
                     int choice=scanner.nextInt();
                     if (choice==1){
-                        ((client) current_user).setMembership(true);
+                        try{
+                            ClientServiceDao cl= new ClientServiceDao();
+                            cl.setMembership(current_user.getUser_name());
+                        }
+                        catch (SQLException e){
+                            System.out.println(e.getMessage());
+                        }
                     }
                     break;
                 case 6:
-                    car temp=car.create_car();
-                    ((client) current_user).add_car(temp);
+                    try{
+                        CarServiceDao car= new CarServiceDao();
+                        car.createCar(current_user.getUser_name());
+                    }
+                    catch (SQLException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 7:
-                    ((client) current_user).delete_car();
-                    break;
+                    try{
+                        CarServiceDao car= new CarServiceDao();
+                        car.deleteCar(current_user.getUser_name());
+                    }
+                    catch (SQLException e){
+                        System.out.println(e.getMessage());
+                    }
                 case 8:
-                    ((client) current_user).show_cars();
+                    try{
+                        ClientServiceDao cl = new ClientServiceDao();
+                        cl.show(current_user.getUser_name());
+                    }
+                    catch (SQLException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 9:
                     return 0;

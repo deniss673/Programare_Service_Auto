@@ -1,12 +1,21 @@
 package model;
 
+import java.sql.SQLException;
 import java.util.Scanner;
+
+import dao.CarDao;
 
 public class car {;
     private String manufacturer;
     private String plate_number;
     private int year;
     private String engine;
+
+    private CarDao carDao;
+
+    public car() {
+
+    }
 
     public car(String manufacturer,String plate_number, int year, String engine) {
         this.manufacturer = manufacturer;
@@ -41,7 +50,7 @@ public class car {;
         this.manufacturer = manufacturer;
     }
 
-    public static car create_car(){
+    public car create_car() throws SQLException {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the manufacturer: ");
         String manufacturer = sc.nextLine();

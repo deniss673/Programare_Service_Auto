@@ -1,12 +1,12 @@
 package model;
 
-public class employee extends persoana{
+public class employee extends user {
     private String position;
     private int salary;
 
 
-    public employee(persoana Persoana){
-        super(Persoana.getFirst_name(),Persoana.getLast_name(),Persoana.getPhone_number(), Persoana.getUser_name(), Persoana.getPassword());
+    public employee(user user){
+        super(user.getFirst_name(), user.getLast_name(), user.getPhone_number(), user.getUser_name(), user.getPassword());
     }
 
     public String getPosition() {

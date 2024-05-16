@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class client extends persoana{
+public class client extends user {
     private String payment_method;
     private boolean membership;
     private List<car> client_car;
 
-    public client(persoana Persoana){
-        super(Persoana.getFirst_name(),Persoana.getLast_name(),Persoana.getPhone_number(),Persoana.getUser_name(),Persoana.getPassword());
+    public client(user user){
+        super(user.getFirst_name(), user.getLast_name(), user.getPhone_number(), user.getUser_name(), user.getPassword());
         client_car = new ArrayList<>();
     }
 
